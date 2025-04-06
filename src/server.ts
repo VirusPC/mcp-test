@@ -1,6 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { z } from "zod";
+import { addGetAlertsTool, addGetForecastTool } from "./tools.js";
 
 /**
  * Create server instance
@@ -13,7 +12,7 @@ import { z } from "zod";
  * 5. Roots: Understanding roots in MCP
  * 6. Transport: Learn about MCP’s communication mechanisms
  */
-export const server = new McpServer({
+const server = new McpServer({
   name: "weather",
   version: "1.0.0",
   capabilities: {
@@ -21,5 +20,8 @@ export const server = new McpServer({
     tools: {},
   },
 });
+addGetAlertsTool(server);
+addGetForecastTool(server);
 
 
+export { server };

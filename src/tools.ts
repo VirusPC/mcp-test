@@ -1,16 +1,16 @@
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { NWS_API_BASE } from "./config.js";
 import { AlertsResponse, ForecastPeriod, ForecastResponse, formatAlert, makeNWSRequest, PointsResponse } from "./helpers.js";
-import { server } from "./server.js";
 import { z } from "zod";
 
 // Register weather tools
-server.tool(
-  "get-alerts",
-  "Get weather alerts for a state",
+export const addGetAlertsTool = (server: McpServer) => server.tool(
+  "get-alerts", // tool name
+  "Get weather alerts for a state", // tool description
   {
     state: z.string().length(2).describe("Two-letter state code (e.g. CA, NY)"),
-  },
-  async ({ state }) => {
+  }, // tool parameters (input schema)
+  async ({ state }) => { // tool function (input -> output)
     const stateCode = state.toUpperCase();
     const alertsUrl = `${NWS_API_BASE}/alerts?area=${stateCode}`;
     const alertsData = await makeNWSRequest<AlertsResponse>(alertsUrl);
@@ -52,7 +52,7 @@ server.tool(
   },
 );
 
-server.tool(
+export const addGetForecastTool = (server: McpServer) => server.tool(
   "get-forecast",
   "Get weather forecast for a location",
   {

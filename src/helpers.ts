@@ -1,4 +1,4 @@
-import { USER_AGENT } from "./config.js";
+const USER_AGENT = "weather-app/1.0";
 
 // Helper function for making NWS API requests
 export async function makeNWSRequest<T>(url: string): Promise<T | null> {
