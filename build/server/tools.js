@@ -1,11 +1,13 @@
 import { NWS_API_BASE } from "./config.js";
 import { formatAlert, makeNWSRequest } from "./helpers.js";
-import { server } from "./server.js";
 import { z } from "zod";
 // Register weather tools
-server.tool("get-alerts", "Get weather alerts for a state", {
+export const addGetAlertsTool = (server) => server.tool("get-alerts", // tool name
+"Get weather alerts for a state", // tool description
+{
     state: z.string().length(2).describe("Two-letter state code (e.g. CA, NY)"),
-}, async ({ state }) => {
+}, // tool parameters (input schema)
+async ({ state }) => {
     const stateCode = state.toUpperCase();
     const alertsUrl = `${NWS_API_BASE}/alerts?area=${stateCode}`;
     const alertsData = await makeNWSRequest(alertsUrl);
@@ -41,7 +43,7 @@ server.tool("get-alerts", "Get weather alerts for a state", {
         ],
     };
 });
-server.tool("get-forecast", "Get weather forecast for a location", {
+export const addGetForecastTool = (server) => server.tool("get-forecast", "Get weather forecast for a location", {
     latitude: z.number().min(-90).max(90).describe("Latitude of the location"),
     longitude: z.number().min(-180).max(180).describe("Longitude of the location"),
 }, async ({ latitude, longitude }) => {
