@@ -11,9 +11,17 @@ export const addGetAlertsTool = (server: McpServer) => server.tool(
     state: z.string().length(2).describe("Two-letter state code (e.g. CA, NY)"),
   }, // tool parameters (input schema)
   async ({ state }) => { // tool function (input -> output)
+  //   return {
+  //     content: [
+  //       {
+  //         type: "text",
+  //         text: `alert tool called: the weather in ${state} is good`,
+  //       },
+  //     ],
+  //   }
     const stateCode = state.toUpperCase();
     const alertsUrl = `${NWS_API_BASE}/alerts?area=${stateCode}`;
-    const alertsData = await makeNWSRequest<AlertsResponse>(alertsUrl);
+    const alertsData = await makeNWSRequest<AlertsResponse>(alertsUrl); 
 
     if (!alertsData) {
       return {
@@ -60,6 +68,14 @@ export const addGetForecastTool = (server: McpServer) => server.tool(
     longitude: z.number().min(-180).max(180).describe("Longitude of the location"),
   },
   async ({ latitude, longitude }) => {
+    // return {
+    //   content: [
+    //     {
+    //       type: "text",
+    //       text: `forecast tool called: the weather in ${latitude}, ${longitude} is good`,
+    //     },
+    //   ],
+    // }
     // Get grid point data
     const pointsUrl = `${NWS_API_BASE}/points/${latitude.toFixed(4)},${longitude.toFixed(4)}`;
     const pointsData = await makeNWSRequest<PointsResponse>(pointsUrl);
